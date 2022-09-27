@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import router from '@/router';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const MAX_INPUT_LENGTH = 75;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_EMAIL_LENGTH = 100;
 const email = ref('');
 const password = ref('');
-const passwordRepeat = ref('');
-const firstName = ref('');
-const lastName = ref('');
-const isRegister = ref(false);
 const errorMessage = ref('');
 const rules = {
   required: (value: string) => checkIsFieldRequired(value) || 'Required!',
@@ -49,18 +41,6 @@ const comparePasswords = (value: string) => {
   return value === password.value ? true : false;
 };
 
-const onRegister = () => {
-  createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then(() => {
-      console.log('Successfully registered!');
-      router.push('/dashboard');
-    })
-    .catch((err: Error) => {
-      console.error(err);
-      errorMessage.value = 'Incorrect email or password!';
-    });
-};
-
 const onLogin = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then(() => {
@@ -73,31 +53,6 @@ const onLogin = () => {
     });
 };
 
-const registerValidation = () => {
-  const requiredFields = [
-    firstName.value,
-    lastName.value,
-    email.value,
-    password.value,
-    passwordRepeat.value,
-  ];
-  const fieldsWithLengthLimitation = [
-    firstName.value,
-    lastName.value,
-    password.value,
-    passwordRepeat.value,
-  ];
-  requiredFields.forEach((requiredField) => {
-    if (!checkIsFieldRequired(requiredField)) return false;
-  });
-  fieldsWithLengthLimitation.forEach((field) => {
-    if (!checkLength(field)) return false;
-  });
-  if (!checkEmail(email.value)) return false;
-  if (!comparePasswords(passwordRepeat.value)) return false;
-  return true;
-};
-
 const loginValidation = () => {
   if (!checkEmail(email.value)) return false;
   if (!checkPasswordLength(password.value)) return false;
@@ -106,85 +61,35 @@ const loginValidation = () => {
   return true;
 };
 
-const clearInputs = () => {
-  firstName.value = '';
-  lastName.value = '';
-  email.value = '';
-  password.value = '';
-  passwordRepeat.value = '';
-  errorMessage.value = '';
-};
-
-const changeToRegisterOrLogin = () => {
-  isRegister.value = !isRegister.value;
-  clearInputs();
-};
-
 const onSubmit = () => {
-  if (isRegister.value) {
-    if (!registerValidation()) return;
-    onRegister();
-  }
   if (!loginValidation()) return;
   onLogin();
 };
 </script>
 
 <template>
-  <v-card
-    class="d-flex flex-column justify-center items-center px-6 py-10 login"
-    width="100%"
-    height="max-content"
-    max-width="800px"
-  >
-    <v-form v-on:submit.prevent="onSubmit()">
-      <v-text-field
-        type="text"
-        label="Email"
-        v-model="email"
-        :counter="MAX_EMAIL_LENGTH"
-        :rules="[rules.required, rules.email]"
-      ></v-text-field>
-      <v-text-field
-        type="password"
-        label="Password"
-        :rules="[rules.required, rules.passwordCounter, rules.counter]"
-        v-model="password"
-      ></v-text-field>
-      <v-alert
-        :text="errorMessage"
-        color="error"
-        type="info"
-        v-if="errorMessage"
-      ></v-alert>
-      <v-btn
-        color="success"
-        width="100%"
-        type="submit"
-        class="mt-6"
-        v-if="!isRegister"
-        >Login</v-btn
-      >
-      <v-btn
-        color="success"
-        width="100%"
-        type="submit"
-        class="mt-6"
-        v-if="isRegister"
-        >Register</v-btn
-      >
-      <v-btn v-on:click="changeToRegisterOrLogin()" class="mt-5" width="100%">{{
-        isRegister ? `Back to login` : `Register`
-      }}</v-btn>
-    </v-form>
-  </v-card>
+  <v-form v-on:submit.prevent="onSubmit()">
+    <v-text-field
+      type="text"
+      label="Email"
+      v-model="email"
+      :counter="MAX_EMAIL_LENGTH"
+      :rules="[rules.required, rules.email]"
+    ></v-text-field>
+    <v-text-field
+      type="password"
+      label="Password"
+      :rules="[rules.required, rules.passwordCounter, rules.counter]"
+      v-model="password"
+    ></v-text-field>
+    <v-alert
+      :text="errorMessage"
+      color="error"
+      type="info"
+      v-if="errorMessage"
+    ></v-alert>
+    <v-btn color="success" width="100%" type="submit" class="mt-6">Login</v-btn>
+  </v-form>
 </template>
 
-<style>
-.login {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-</style>
+<style></style>

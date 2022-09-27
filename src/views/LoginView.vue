@@ -6,6 +6,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import Login from '@/components/Login.vue';
+import Register from '../components/Register.vue';
 
 const MAX_INPUT_LENGTH = 75;
 const MIN_PASSWORD_LENGTH = 8;
@@ -132,77 +134,18 @@ const onSubmit = () => {
 
 <template>
   <v-card
-    class="d-flex flex-column justify-center items-center px-6 py-10 login"
+    class="d-flex flex-column px-6 py-10 login"
     width="100%"
     height="max-content"
     max-width="800px"
   >
-    <v-form v-on:submit.prevent="onSubmit()">
-      <v-text-field
-        label="First name"
-        type="text"
-        :value="firstName"
-        :rules="[rules.required, rules.counter]"
-        :counter="MAX_INPUT_LENGTH"
-        v-if="isRegister"
-      ></v-text-field>
-      <v-text-field
-        label="Last name"
-        type="text"
-        :value="lastName"
-        :rules="[rules.required, rules.counter]"
-        :counter="MAX_INPUT_LENGTH"
-        v-if="isRegister"
-      ></v-text-field>
-      <v-text-field
-        type="text"
-        label="Email"
-        v-model="email"
-        :value="email"
-        :counter="MAX_EMAIL_LENGTH"
-        :rules="[rules.required, rules.email]"
-      ></v-text-field>
-      <v-text-field
-        type="password"
-        label="Password"
-        :value="password"
-        :rules="[rules.required, rules.passwordCounter, rules.counter]"
-        v-model="password"
-      ></v-text-field>
-      <v-text-field
-        type="password"
-        label="Repeat Password"
-        :value="passwordRepeat"
-        v-if="isRegister"
-        :rules="[rules.required, rules.comparePasswords, rules.counter]"
-        v-model="passwordRepeat"
-      ></v-text-field>
-      <v-alert
-        :text="errorMessage"
-        color="error"
-        type="info"
-        v-if="errorMessage"
-      ></v-alert>
-      <v-btn
-        color="success"
-        width="100%"
-        type="submit"
-        class="mt-6"
-        v-if="!isRegister"
-        >Login</v-btn
-      >
-      <v-btn
-        color="success"
-        width="100%"
-        type="submit"
-        class="mt-6"
-        v-if="isRegister"
-        >Register</v-btn
-      >
-      <v-btn v-on:click="changeToRegisterOrLogin()" class="mt-5" width="100%">{{
-        isRegister ? `Back to login` : `Register`
-      }}</v-btn>
-    </v-form>
+    <!-- <v-form v-on:submit.prevent="onSubmit()"> -->
+    <login v-if="!isRegister"></login>
+    <register v-if="isRegister"></register>
+    <v-btn v-on:click="changeToRegisterOrLogin()" class="mt-5" width="100%">{{
+      isRegister ? `Back to login` : `Register`
+    }}</v-btn>
+    <!-- </v-form> -->
   </v-card>
 </template>
 
