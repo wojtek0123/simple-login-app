@@ -2,49 +2,21 @@
 import { ref } from 'vue';
 import router from '@/router';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  rules,
+  checkEmail,
+  checkPasswordLength,
+  checkIsFieldRequired,
+  MAX_EMAIL_LENGTH,
+} from '@/utils';
 
-const MAX_INPUT_LENGTH = 75;
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_EMAIL_LENGTH = 100;
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
-const rules = {
-  required: (value: string) => checkIsFieldRequired(value) || 'Required!',
-  counter: (value: string) =>
-    checkLength(value) || `Max ${MAX_INPUT_LENGTH} characters`,
-  email: (value: string) => checkEmail(value) || 'Invalid email',
-  passwordCounter: (value: string) =>
-    checkPasswordLength(value) || 'Min 8 characters',
-  comparePasswords: (value: string) =>
-    comparePasswords(value) || 'Passwords are differents',
-};
-
-const checkIsFieldRequired = (value: string) => {
-  return !!value;
-};
-
-const checkLength = (value: string) => {
-  return value.length <= MAX_INPUT_LENGTH ? true : false;
-};
-
-const checkEmail = (value: string) => {
-  const pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-  return pattern.test(value);
-};
-
-const checkPasswordLength = (value: string) => {
-  return value.length >= MIN_PASSWORD_LENGTH ? true : false;
-};
-
-const comparePasswords = (value: string) => {
-  return value === password.value ? true : false;
-};
 
 const onLogin = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then(() => {
-      console.log('You are log in!');
       router.push('/dashboard');
     })
     .catch((err: Error) => {
