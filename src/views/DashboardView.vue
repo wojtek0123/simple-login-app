@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import router from '@/router';
 import { signOut, getAuth } from 'firebase/auth';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
+import Pages from '@/components/Pages.vue';
+import { desserts as DESSERTS_DUMMY_DATA } from '../data/dummy-data';
+
+type x = 'pages' | 'users' | 'orders';
+
+let page: Ref<x> = ref('orders');
 
 const showMobileMenu = ref(false);
 const search = ref('');
@@ -24,97 +30,23 @@ const headers = ref([
   { text: 'Protein (g)', value: 'protein' },
   { text: 'Iron (%)', value: 'iron' },
 ]);
-const desserts = ref([
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    iron: '1%',
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    iron: '1%',
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    iron: '7%',
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    iron: '8%',
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    iron: '16%',
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    iron: '0%',
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    iron: '2%',
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    iron: '45%',
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    iron: '22%',
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    iron: '6%',
-  },
-]);
+const desserts = ref(DESSERTS_DUMMY_DATA);
+
+const closeMobileMenu = (text: x) => {
+  showMobileMenu.value = !showMobileMenu;
+  page.value = text;
+};
 </script>
 
 <template>
   <div class="px-5">
     <v-card class="mobile-menu" v-if="showMobileMenu">
-      <p>Profile</p>
-      <p>Orders</p>
-      <p>Change password</p>
-      <p>Contact</p>
+      <v-btn text x-large>Profile</v-btn>
+      <v-btn class="mobile-items" text x-large @click="closeMobileMenu('pages')"
+        >Pages</v-btn
+      >
+      <v-btn text x-large @click="closeMobileMenu('users')">Users</v-btn>
+      <v-btn text x-large @click="closeMobileMenu('orders')">Orders</v-btn>
     </v-card>
     <h1 class="text-center mb-5 mt-2">Dashboard</h1>
     <v-app-bar app width="100%" elevation="4" class="app-bar">
@@ -143,28 +75,41 @@ const desserts = ref([
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Profile</v-list-item-title>
+            <v-list-item-title><v-btn text>Profile</v-btn></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Orders</v-list-item-title>
+            <v-list-item-title
+              ><v-btn text @click="page = 'pages'"
+                >Pages</v-btn
+              ></v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Change Password</v-list-item-title>
+            <v-list-item-title
+              ><v-btn text @click="page = 'users'"
+                >Users</v-btn
+              ></v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
+            <v-list-item-title
+              ><v-btn text @click="page = 'orders'"
+                >Orders</v-btn
+              ></v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
       </v-card>
       <div class="d-flex flex-column wrapper">
-        <v-text-field label="Search" v-model="search"></v-text-field>
+        <Pages v-if="page === 'pages'"></Pages>
         <v-data-table
+          v-if="page === 'orders'"
           :headers="headers"
           :items="desserts"
           :items-per-page="5"
@@ -186,6 +131,9 @@ const desserts = ref([
   justify-content: center;
   flex-direction: column;
   min-height: 100vh;
+  font-size: 2rem;
+}
+.mobile-items {
   font-size: 2rem;
 }
 .header-wrapper {
