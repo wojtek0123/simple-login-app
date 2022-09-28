@@ -26,7 +26,7 @@ const onRegister = () => {
     })
     .catch((err: Error) => {
       console.error(err);
-      errorMessage.value = 'Incorrect email or password!';
+      errorMessage.value = 'Something went wrong!';
     });
 };
 
@@ -103,12 +103,9 @@ const onSubmit = () => {
       ]"
       v-model="passwordRepeat"
     ></v-text-field>
-    <v-alert
-      :text="errorMessage"
-      color="error"
-      type="info"
-      v-if="errorMessage"
-    ></v-alert>
+    <v-alert type="error" v-if="errorMessage !== ''">{{
+      errorMessage
+    }}</v-alert>
     <v-btn color="success" width="100%" type="submit" class="mt-6"
       >Register</v-btn
     >

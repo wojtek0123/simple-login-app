@@ -41,6 +41,7 @@ const onSubmit = () => {
 
 <template>
   <v-form v-on:submit.prevent="onSubmit()">
+    <p>{{ errorMessage }}</p>
     <v-text-field
       type="text"
       label="Email"
@@ -54,12 +55,9 @@ const onSubmit = () => {
       :rules="[rules.required, rules.passwordCounter, rules.counter]"
       v-model="password"
     ></v-text-field>
-    <v-alert
-      :text="errorMessage"
-      color="error"
-      type="info"
-      v-if="errorMessage"
-    ></v-alert>
+    <v-alert type="error" v-if="errorMessage !== ''">{{
+      errorMessage
+    }}</v-alert>
     <v-btn color="success" width="100%" type="submit" class="mt-6">Login</v-btn>
   </v-form>
 </template>
