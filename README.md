@@ -4,6 +4,8 @@
 ```
 npm install
 ```
+### Create .env file, you have an example in .env-example
+You have to create a firebase project and add authentication to your project
 
 ### Compiles and hot-reloads for development
 ```
