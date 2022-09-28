@@ -41,7 +41,6 @@ const onSubmit = () => {
 
 <template>
   <v-form v-on:submit.prevent="onSubmit()">
-    <p>{{ errorMessage }}</p>
     <v-text-field
       type="text"
       label="Email"

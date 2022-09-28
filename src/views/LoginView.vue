@@ -21,7 +21,7 @@ const changeToRegisterOrLogin = () => {
     <register v-if="isRegister"></register>
     <v-btn
       v-on:click="changeToRegisterOrLogin()"
-      class="mt-5 registerBtn"
+      class="mt-5 register-btn"
       width="100%"
       >{{
         isRegister ? `Back to login` : `Don't have password? Register`
@@ -38,7 +38,7 @@ const changeToRegisterOrLogin = () => {
   transform: translate(-50%, -50%);
 }
 
-.registerBtn {
+.register-btn {
   font-size: 1rem;
   text-transform: lowercase;
   font-weight: 400;
