@@ -8,7 +8,7 @@ const searchInputText = ref('');
 const dialog = ref(false);
 const dialogDelete = ref(false);
 const headers = ref([
-  { text: 'Index', value: 'index' },
+  { text: 'Index', value: 'index', sortable: false },
   { text: 'Pages', value: 'title' },
   { text: 'Create date', value: 'createDate' },
   { text: 'Author', value: 'author' },
@@ -33,14 +33,13 @@ const defaultItem = {
   author: '',
   keywords: '',
 };
-const filteredPages: Ref<Page[]> = ref([]);
 
 const formTitle = () => {
   return editedIndex.value === -1 ? 'New Item' : 'Edit Item';
 };
 const initialize = () => {
   searchInputText.value = '';
-  filteredPages.value = pages.value;
+  pages.value = pages.value;
 };
 
 const editItem = (item: Page) => {
@@ -82,43 +81,26 @@ const save = () => {
   close();
 };
 
-const onFilterPages = () => {
-  if (searchInputText.value.length === 0) {
-    filteredPages.value = pages.value.map((page) => page);
-    return;
-  }
-  filteredPages.value = pages.value.filter((page) =>
-    [...Object.keys(page)].some((key) =>
-      page[key as keyof Page]
-        .toLowerCase()
-        .includes(searchInputText.value.toLowerCase())
-    )
-  );
-};
-
 initialize();
 </script>
 
 <template>
   <v-data-table
     :headers="headers"
-    :items="filteredPages"
+    :items="pages"
+    :search="searchInputText"
     sort-by="index"
     class="elevation-1"
     width="100%"
   >
-    <template v-slot:item.index="{ item }">
+    <template v-slot:item.index="{ index }">
       <v-row>
-        <v-col>{{ filteredPages.indexOf(item) }}</v-col>
+        <v-col>{{ +index + 1 }}</v-col>
       </v-row>
     </template>
     <template v-slot:top>
       <v-toolbar flat>
-        <v-text-field
-          v-model="searchInputText"
-          label="Search"
-          @input="onFilterPages()"
-        ></v-text-field>
+        <v-text-field v-model="searchInputText" label="Search"></v-text-field>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="800px">

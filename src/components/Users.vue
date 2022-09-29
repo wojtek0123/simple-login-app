@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { User, users as DUMMY_DATA_USERS } from '../data/dummy-data';
+import { pages, User, users as DUMMY_DATA_USERS } from '../data/dummy-data';
 
 const searchInputText = ref('');
 const dialog = ref(false);
 const dialogDelete = ref(false);
 const typeOfAccounts = ['User', 'Admin', 'Moderator'];
 const headers = ref([
-  { text: 'Index', value: 'index' },
+  { text: 'Index', value: 'index', sortable: false },
   { text: 'Users', value: 'firstName' },
   { text: 'Lastname', value: 'lastName' },
   { text: 'Email', value: 'email' },
@@ -37,14 +37,13 @@ const defaultItem: User = {
   author: '',
   note: '',
 };
-const filteredPages: Ref<User[]> = ref([]);
 
 const formTitle = () => {
   return editedIndex.value === -1 ? 'New Item' : 'Edit Item';
 };
 const initialize = () => {
   searchInputText.value = '';
-  filteredPages.value = users.value;
+  users.value = users.value;
 };
 
 const editItem = (item: User) => {
@@ -86,43 +85,26 @@ const save = () => {
   close();
 };
 
-const onFilterPages = () => {
-  if (searchInputText.value.length === 0) {
-    filteredPages.value = users.value.map((user) => user);
-    return;
-  }
-  filteredPages.value = users.value.filter((user) =>
-    [...Object.keys(user)].some((key) =>
-      user[key as keyof User]
-        .toLowerCase()
-        .includes(searchInputText.value.toLowerCase())
-    )
-  );
-};
-
 initialize();
 </script>
 
 <template>
   <v-data-table
     :headers="headers"
-    :items="filteredPages"
+    :items="users"
+    :search="searchInputText"
     sort-by="index"
     class="elevation-1"
     width="100%"
   >
-    <template v-slot:item.index="{ item, index }">
+    <template v-slot:item.index="{ index }">
       <v-row>
-        <v-col>{{ index }}</v-col>
+        <v-col>{{ index + 1 }}</v-col>
       </v-row>
     </template>
     <template v-slot:top>
       <v-toolbar flat>
-        <v-text-field
-          v-model="searchInputText"
-          label="Search"
-          @input="onFilterPages()"
-        ></v-text-field>
+        <v-text-field v-model="searchInputText" label="Search"></v-text-field>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="800px">
