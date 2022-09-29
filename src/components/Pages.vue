@@ -3,21 +3,17 @@ import { Ref, ref } from 'vue';
 import { VueEditor } from 'vue2-editor';
 import { Page, pages as DUMMY_DATA_PAGES } from '../data/dummy-data';
 
+const pages: Ref<Page[]> = ref(DUMMY_DATA_PAGES);
 const searchInputText = ref('');
 const dialog = ref(false);
 const dialogDelete = ref(false);
 const headers = ref([
-  {
-    text: 'Pages',
-    align: 'start',
-    sortable: false,
-    value: 'title',
-  },
+  { text: 'Index', value: 'index' },
+  { text: 'Pages', value: 'title' },
   { text: 'Create date', value: 'createDate' },
   { text: 'Author', value: 'author' },
   { text: 'Actions', value: 'actions', sortable: false },
 ]);
-const pages: Ref<Page[]> = ref(DUMMY_DATA_PAGES);
 const editedIndex = ref(-1);
 const editedItem: Ref<Page> = ref({
   title: '',
@@ -107,10 +103,15 @@ initialize();
   <v-data-table
     :headers="headers"
     :items="filteredPages"
-    sort-by="title"
+    sort-by="index"
     class="elevation-1"
     width="100%"
   >
+    <template v-slot:item.index="{ item }">
+      <v-row>
+        <v-col>{{ filteredPages.indexOf(item) }}</v-col>
+      </v-row>
+    </template>
     <template v-slot:top>
       <v-toolbar flat>
         <v-text-field

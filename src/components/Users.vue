@@ -7,12 +7,8 @@ const dialog = ref(false);
 const dialogDelete = ref(false);
 const typeOfAccounts = ['User', 'Admin', 'Moderator'];
 const headers = ref([
-  {
-    text: 'Users',
-    align: 'start',
-    sortable: false,
-    value: 'firstName',
-  },
+  { text: 'Index', value: 'index' },
+  { text: 'Users', value: 'firstName' },
   { text: 'Lastname', value: 'lastName' },
   { text: 'Email', value: 'email' },
   { text: 'Create date', value: 'createDate' },
@@ -111,10 +107,15 @@ initialize();
   <v-data-table
     :headers="headers"
     :items="filteredPages"
-    sort-by="firstName"
+    sort-by="index"
     class="elevation-1"
     width="100%"
   >
+    <template v-slot:item.index="{ item, index }">
+      <v-row>
+        <v-col>{{ index }}</v-col>
+      </v-row>
+    </template>
     <template v-slot:top>
       <v-toolbar flat>
         <v-text-field
