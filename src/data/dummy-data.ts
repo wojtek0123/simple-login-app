@@ -1,3 +1,13 @@
+export interface Page {
+  title: string;
+  titleSEO: string;
+  createDate: string;
+  author: string;
+  descriptionSEO: string;
+  description: string;
+  keywords: string;
+}
+
 export const pages = [
   {
     title: 'Lorem ipsum dolor sit amet.',
@@ -191,5 +201,99 @@ export const desserts = [
     carbs: 65,
     protein: 7,
     iron: '6%',
+  },
+];
+
+export interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  typeOfAccount: 'Admin' | 'User' | 'Moderator';
+  createdDate: string;
+  author: string;
+  note: string;
+}
+
+export const users: User[] = [
+  {
+    firstName: 'Maecenas',
+    lastName: 'Laoreet',
+    email: 'maecenas@email.com',
+    typeOfAccount: 'Admin',
+    createdDate: new Date().toLocaleString(),
+    author: 'Phasellus Ultrices',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Nam',
+    lastName: 'Pellentesque',
+    email: 'pellentesque@email.com',
+    typeOfAccount: 'User',
+    createdDate: new Date().toLocaleString(),
+    author: 'Pellentesque Posuere',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Sed',
+    lastName: 'Cursus',
+    email: 'cursus@email.com',
+    typeOfAccount: 'User',
+    createdDate: new Date().toLocaleString(),
+    author: 'Curabitur Dui',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Aliquam',
+    lastName: 'Erat',
+    email: 'aliquam_erat@email.com',
+    typeOfAccount: 'Moderator',
+    createdDate: new Date().toLocaleString(),
+    author: 'Aliquam Ante',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Suspendisse',
+    lastName: 'Laoreet',
+    email: 'suspendisse_Laoreet@email.com',
+    typeOfAccount: 'User',
+    createdDate: new Date().toLocaleString(),
+    author: 'Donec Vitae',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Mauris',
+    lastName: 'Ornare',
+    email: 'ornare@email.com',
+    typeOfAccount: 'User',
+    createdDate: new Date().toLocaleString(),
+    author: 'Etiam Magna',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Praesent',
+    lastName: 'Congue',
+    email: 'praesent@email.com',
+    typeOfAccount: 'User',
+    createdDate: new Date().toLocaleString(),
+    author: 'Pellentesque Nulla',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Proin',
+    lastName: 'Nisl',
+    email: 'proinnisl@email.com',
+    typeOfAccount: 'Moderator',
+    createdDate: new Date().toLocaleString(),
+    author: 'Cras Ullamcorper',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
+  },
+  {
+    firstName: 'Nunc',
+    lastName: 'Semper',
+    email: 'semper@email.com',
+    typeOfAccount: 'User',
+    createdDate: new Date().toLocaleString(),
+    author: 'Praesent Vestibulum',
+    note: 'Suspendisse feugiat porttitor ex in malesuada. Aenean elementum neque metus, et scelerisque sapien fringilla ac. Cras venenatis, odio in gravida venenatis, tortor lorem gravida urna.',
   },
 ];

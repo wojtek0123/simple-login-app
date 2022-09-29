@@ -4,6 +4,7 @@ import { signOut, getAuth } from 'firebase/auth';
 import { Ref, ref } from 'vue';
 import Pages from '@/components/Pages.vue';
 import { desserts as DESSERTS_DUMMY_DATA } from '../data/dummy-data';
+import Users from '@/components/Users.vue';
 
 type x = 'pages' | 'users' | 'orders';
 
@@ -108,6 +109,7 @@ const closeMobileMenu = (text: x) => {
       </v-card>
       <div class="d-flex flex-column wrapper">
         <Pages v-if="page === 'pages'"></Pages>
+        <Users v-if="page === 'users'"></Users>
         <v-data-table
           v-if="page === 'orders'"
           :headers="headers"

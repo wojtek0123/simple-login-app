@@ -1,66 +1,70 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { VueEditor } from 'vue2-editor';
-import { Page, pages as DUMMY_DATA_PAGES } from '../data/dummy-data';
+import { User, users as DUMMY_DATA_USERS } from '../data/dummy-data';
 
 const searchInputText = ref('');
 const dialog = ref(false);
 const dialogDelete = ref(false);
+const typeOfAccounts = ['User', 'Admin', 'Moderator'];
 const headers = ref([
   {
-    text: 'Pages',
+    text: 'Users',
     align: 'start',
     sortable: false,
-    value: 'title',
+    value: 'firstName',
   },
+  { text: 'Lastname', value: 'lastName' },
+  { text: 'Email', value: 'email' },
   { text: 'Create date', value: 'createDate' },
+  { text: 'Account type', value: 'typeOfAccount' },
   { text: 'Author', value: 'author' },
   { text: 'Actions', value: 'actions', sortable: false },
 ]);
-const pages: Ref<Page[]> = ref(DUMMY_DATA_PAGES);
+const users: Ref<User[]> = ref(DUMMY_DATA_USERS);
 const editedIndex = ref(-1);
-const editedItem: Ref<Page> = ref({
-  title: '',
-  titleSEO: '',
-  description: '',
-  descriptionSEO: '',
-  createDate: '',
+const editedItem = ref({
+  firstName: '',
+  lastName: '',
   author: '',
-  keywords: '',
+  createdDate: '',
+  email: '',
+  note: '',
+  typeOfAccount: 'User',
 });
-const defaultItem = {
-  title: '',
-  titleSEO: '',
-  description: '',
-  descriptionSEO: '',
-  createDate: '',
+
+const defaultItem: User = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  typeOfAccount: 'User',
+  createdDate: '',
   author: '',
-  keywords: '',
+  note: '',
 };
-const filteredPages: Ref<Page[]> = ref([]);
+const filteredPages: Ref<User[]> = ref([]);
 
 const formTitle = () => {
   return editedIndex.value === -1 ? 'New Item' : 'Edit Item';
 };
 const initialize = () => {
   searchInputText.value = '';
-  filteredPages.value = pages.value;
+  filteredPages.value = users.value;
 };
 
-const editItem = (item: Page) => {
-  editedIndex.value = pages.value.indexOf(item);
+const editItem = (item: User) => {
+  editedIndex.value = users.value.indexOf(item);
   editedItem.value = Object.assign({}, item);
   dialog.value = true;
 };
 
-const deleteItem = (item: Page) => {
-  editedIndex.value = pages.value.indexOf(item);
+const deleteItem = (item: User) => {
+  editedIndex.value = users.value.indexOf(item);
   editedItem.value = Object.assign({}, item);
   dialogDelete.value = true;
 };
 
 const deleteItemConfirm = () => {
-  pages.value.splice(editedIndex.value, 1);
+  users.value.splice(editedIndex.value, 1);
   initialize();
   closeDelete();
 };
@@ -79,20 +83,24 @@ const closeDelete = () => {
 
 const save = () => {
   if (editedIndex.value > -1) {
-    Object.assign(pages.value[editedIndex.value], editedItem.value);
+    Object.assign(users.value[editedIndex.value], editedItem.value);
   } else {
-    pages.value.push(editedItem.value);
+    users.value.push(editedItem.value as User);
   }
   close();
 };
 
 const onFilterPages = () => {
   if (searchInputText.value.length === 0) {
-    filteredPages.value = pages.value.map((page) => page);
+    filteredPages.value = users.value.map((user) => user);
     return;
   }
-  filteredPages.value = pages.value.filter((page) =>
-    page.title.toLowerCase().includes(searchInputText.value.toLowerCase())
+  filteredPages.value = users.value.filter((user) =>
+    [...Object.keys(user)].some((key) =>
+      user[key as keyof User]
+        .toLowerCase()
+        .includes(searchInputText.value.toLowerCase())
+    )
   );
 };
 
@@ -103,7 +111,7 @@ initialize();
   <v-data-table
     :headers="headers"
     :items="filteredPages"
-    sort-by="title"
+    sort-by="firstName"
     class="elevation-1"
     width="100%"
   >
@@ -111,7 +119,7 @@ initialize();
       <v-toolbar flat>
         <v-text-field
           v-model="searchInputText"
-          label="Search by title"
+          label="Search"
           @input="onFilterPages()"
         ></v-text-field>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -127,40 +135,44 @@ initialize();
                 <v-row>
                   <v-col>
                     <v-text-field
-                      v-model="editedItem.title"
-                      label="Title"
+                      v-model="editedItem.firstName"
+                      label="Firstname"
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <v-text-field
-                      v-model="editedItem.titleSEO"
-                      label="SEO title"
+                      v-model="editedItem.lastName"
+                      label="Lastname"
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
+                  <v-col class="d-flex" cols="12" sm="6">
+                    <v-select
+                      :items="typeOfAccounts"
+                      label="Type of account"
+                      v-model="editedItem.typeOfAccount"
+                      dense
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-row>
                   <v-col>
-                    <label>Description</label>
-                    <vue-editor v-model="editedItem.description"></vue-editor>
+                    <v-text-field
+                      v-model="editedItem.email"
+                      label="Email"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <v-textarea
                       counter
-                      v-model="editedItem.descriptionSEO"
-                      label="Desciption SEO"
+                      v-model="editedItem.note"
+                      label="Note"
                     ></v-textarea>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-text-field
-                      v-model="editedItem.titleSEO"
-                      label="Title SEO"
-                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
