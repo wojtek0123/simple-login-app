@@ -39,7 +39,6 @@ const formTitle = () => {
 };
 const initialize = () => {
   searchInputText.value = '';
-  pages.value = pages.value;
 };
 
 const editItem = (item: Page) => {

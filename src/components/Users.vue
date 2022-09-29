@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { pages, User, users as DUMMY_DATA_USERS } from '../data/dummy-data';
+import { User, users as DUMMY_DATA_USERS } from '../data/dummy-data';
 
 const searchInputText = ref('');
 const dialog = ref(false);
@@ -11,7 +11,7 @@ const headers = ref([
   { text: 'Users', value: 'firstName' },
   { text: 'Lastname', value: 'lastName' },
   { text: 'Email', value: 'email' },
-  { text: 'Create date', value: 'createDate' },
+  { text: 'Create date', value: 'createdDate' },
   { text: 'Account type', value: 'typeOfAccount' },
   { text: 'Author', value: 'author' },
   { text: 'Actions', value: 'actions', sortable: false },
@@ -43,7 +43,6 @@ const formTitle = () => {
 };
 const initialize = () => {
   searchInputText.value = '';
-  users.value = users.value;
 };
 
 const editItem = (item: User) => {
