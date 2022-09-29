@@ -92,7 +92,11 @@ const onFilterPages = () => {
     return;
   }
   filteredPages.value = pages.value.filter((page) =>
-    page.title.toLowerCase().includes(searchInputText.value.toLowerCase())
+    [...Object.keys(page)].some((key) =>
+      page[key as keyof Page]
+        .toLowerCase()
+        .includes(searchInputText.value.toLowerCase())
+    )
   );
 };
 
@@ -111,7 +115,7 @@ initialize();
       <v-toolbar flat>
         <v-text-field
           v-model="searchInputText"
-          label="Search by title"
+          label="Search"
           @input="onFilterPages()"
         ></v-text-field>
         <v-divider class="mx-4" inset vertical></v-divider>
